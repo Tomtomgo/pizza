@@ -67,8 +67,8 @@ class Car:
         self.completed_rides.append(ride)
 
     def __str__(self):
-        return 'Car#{}[t={}; loc={}; b={}; cmp={}]'.format(self.i,
-                                                           self.time,
-                                                           self.location,
-                                                           self.points,
-                                                           self.completed_rides)
+        return 'Car#{}[t={}; loc={}; b={}; cmp=[{}]]'.format(self.i,
+                                                             self.time,
+                                                             self.location,
+                                                             self.points,
+                                                             ','.join(map(str, self.completed_rides)))
