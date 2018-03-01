@@ -1,4 +1,4 @@
-NEGATIVE_INFINITY = -1e12
+NEGATIVE_INFINITY = float('-inf')
 
 
 class Location:
@@ -20,6 +20,25 @@ class Ride:
         self.stop_location = stop_location
         self.start_time = start_time
         self.end_time = end_time
+
+    def assign_car(self, cars, bonus):
+        best = None
+        best_score = NEGATIVE_INFINITY
+        best_points = 0
+        for car in cars:
+            if car.time >= self.end_time:
+                continue
+            score, points = car.score_ride(self, bonus)
+            if score > best_score:
+                best = car
+                best_score = score
+                best_points = points
+        if best is not None:
+            print(f'Assigning {best}({best_points},{best_score}) for {self}')
+            best.complete(self, best_points)
+            print(f'Car is now {best}')
+        else:
+            print(f'Skip {self} as no available cars')
 
     def length(self):
         return self.start_location.distance_to(self.stop_location)
@@ -60,7 +79,7 @@ class Car:
 
     def score_ride(self, ride: Ride, bonus):
         if self.time + self.duration(ride) >= ride.end_time:
-            return -NEGATIVE_INFINITY, 0
+            return NEGATIVE_INFINITY, 0
 
         pickup_time = self.time + self.location.distance_to(ride.start_location)
         b = bonus if pickup_time  <= ride.start_time else 0
@@ -77,8 +96,8 @@ class Car:
         self.completed_rides.append(ride)
 
     def __str__(self):
-        return 'Car#{}[t={}; loc={}; b={}; cmp=[{}]]'.format(self.i,
-                                                             self.time,
-                                                             self.location,
-                                                             self.points,
-                                                             ','.join(map(str, self.completed_rides)))
+        return 'Car#{}[t={}; loc={}; b={}; cmp={}]'.format(self.i,
+                                                           self.time,
+                                                           self.location,
+                                                           self.points,
+                                                           len(self.completed_rides))

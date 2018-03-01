@@ -2,7 +2,16 @@
 
 from objects import *
 import time
+import math
 
+def sq(a):
+    return a * a
+
+def space_time(r):
+    return math.sqrt(
+        sq(r.end_time - r.start_time) +
+        sq(r.stop_location.column - r.start_location.column) +
+        sq(r.stop_location.row - r.start_location.row))
 
 def run(input_file):
     def split_as_int(line):
@@ -16,12 +25,16 @@ def run(input_file):
             rides[i] = Ride(i, Location(start_row, start_column), Location(finish_row, finish_column), earliest_start, latest_finish)
 
     cars = [Car(i) for i in range(0, num_vehicles)]
-    for car in cars:
-        while car.time < steps:
-            ride, points = car.choose_next_ride(rides, bonus)
-            if ride is None:
-                break
-            car.complete(ride, points)
+
+
+    for ride in sorted(rides, key=space_time):
+        ride.assign_car(cars, bonus)
+    # for car in cars:
+    #     while car.time < steps:
+    #         ride, points = car.choose_next_ride(rides, bonus)
+    #         if ride is None:
+    #             break
+    #         car.complete(ride, points)
 
     vehicle_assigned_to_ride = [None] * num_rides
     for car in cars:
@@ -39,7 +52,7 @@ def run(input_file):
     print('Scored {}'.format(points))
 
 level = 'b'
-for input_file in ('a_example.in', 'b_should_be_easy.in', 'c_no_hurry.in', 'd_metropolis.in', 'e_high_bonus.in'):
+for input_file in ('b_should_be_easy.in', 'c_no_hurry.in', 'd_metropolis.in', 'e_high_bonus.in'):
     if input_file[0] > level:
         continue
 
