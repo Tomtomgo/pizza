@@ -1,5 +1,6 @@
 NEGATIVE_INFINITY = -1e12
 
+
 class Location:
     def __init__(self, row, column):
         self.row = row
@@ -68,7 +69,6 @@ class Car:
         score = points - wait
 
         return score, points
-
 
     def complete(self, ride: Ride, points):
         self.location = ride.stop_location

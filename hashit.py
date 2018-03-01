@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from objects import *
-
 import time
+
 
 def run(input_file):
     def split_as_int(line):
