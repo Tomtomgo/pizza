@@ -70,7 +70,7 @@ def single_run(input_file):
 
 def main():
     level = 'c'
-    levels = [x for x in ('a_example.in', 'b_should_be_easy.in', 'c_no_hurry.in', 'd_metropolis.in', 'e_high_bonus.in') if x[0] <= level]
+    levels = ['e_high_bonus.in']
 
     pool = Pool(len(levels))
     pool.map(single_run, levels)
