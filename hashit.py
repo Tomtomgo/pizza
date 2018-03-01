@@ -20,11 +20,15 @@ with open(IN, 'r') as f:
 
 cars = [Car(i) for i in range(0, num_vehicles)]
 for car in cars:
+    print(f'Simulating {car}')
     while car.time < steps:
+        print(f'at {car.time}...')
         ride, score = car.choose_next_ride(rides, bonus)
+        print(f'Found {ride} with {score}')
         if ride is None:
             break
         car.complete(ride, score)
+    print(f'Done with the {car}')
 
 
 vehicle_assigned_to_ride = [None] * num_rides

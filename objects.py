@@ -2,9 +2,12 @@ class Location:
     def __init__(self, row, column):
         self.row = row
         self.column = column
-        
+
     def distance_to(self, other):
         return abs(self.column - other.column) + abs(self.row - other.row)
+
+    def __str__(self):
+        return 'Location[{}; {}]'.format(self.row, self.column)
 
 
 class Ride:
@@ -17,6 +20,13 @@ class Ride:
 
     def length(self):
         return self.start_location.distance_to(self.stop_location)
+
+    def __str__(self):
+        return 'Ride#{}[from={} to={}; ({}; {})]'.format(self.i,
+                                                         self.start_location,
+                                                         self.stop_location,
+                                                         self.start_time,
+                                                         self.end_time)
 
 
 class Car:
@@ -55,3 +65,10 @@ class Car:
         self.time += self.duration(ride)
         self.points += score
         self.completed_rides.append(ride)
+
+    def __str__(self):
+        return 'Car#{}[t={}; loc={}; b={}; cmp={}]'.format(self.i,
+                                                           self.time,
+                                                           self.location,
+                                                           self.points,
+                                                           self.completed_rides)
