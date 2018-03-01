@@ -20,9 +20,19 @@ class Ride:
         self.stop_location = stop_location
         self.start_time = start_time
         self.end_time = end_time
+        self._length = self.start_location.distance_to(self.stop_location)
+        self.picked_up = None
 
     def length(self):
-        return self.start_location.distance_to(self.stop_location)
+        return self._length
+
+    def score_points(self, bonus):
+        return self.score_points_for_pickup(self.picked_up, bonus) if self.picked_up is not None else 0
+
+    def score_points_for_pickup(self, pickup_time, bonus):
+        if self.picked_up + self._length >= self.end_time:
+            return 0
+        return self._length + (bonus if pickup_time == self.start_time else 0)
 
     def __str__(self):
         return 'Ride#{}[from={} to={}; ({}; {})]'.format(self.i,
@@ -71,6 +81,7 @@ class Car:
         return score, points
 
     def complete(self, ride: Ride, points):
+        ride.picked_up = self.time + self.location.distance_to(ride.stop_location)
         self.location = ride.stop_location
         self.time += self.duration(ride)
         self.points += points

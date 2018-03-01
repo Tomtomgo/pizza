@@ -23,6 +23,7 @@ def run(input_file):
                 break
             car.complete(ride, points)
 
+    points = 0
     vehicle_assigned_to_ride = [None] * num_rides
     for car in cars:
         for ride in car.completed_rides:
@@ -30,13 +31,14 @@ def run(input_file):
                 raise Exception('Ride {} is assigned to both vehicle {} and {}'.format(ride.i, vehicle_assigned_to_ride[ride.i], car.i))
             vehicle_assigned_to_ride[ride.i] = car.i
 
-    points = 0
+            points += ride.score_points(bonus)
+
+    print('Scored {}'.format(points))
+
     with open(input_file.replace('.in', '.out'), 'w') as f:
         for car in cars:
             points += car.points
             f.write(' '.join([str(len(car.completed_rides))] + [str(ride.i) for ride in car.completed_rides]) + '\n')
-
-    print('Scored {}'.format(points))
 
 level = 'b'
 for input_file in ('a_example.in', 'b_should_be_easy.in', 'c_no_hurry.in', 'd_metropolis.in', 'e_high_bonus.in'):
