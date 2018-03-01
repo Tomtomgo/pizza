@@ -12,7 +12,7 @@ class RidesIndex:
             self._row_index[ride.start_location.row].add(ride)
             self._column_index[ride.start_location.column].add(ride)
             self._start_time_index[ride.start_time].add(ride)
-            self._end_time_index[ride.end_time].add(ride)
+            self._end_time_index[min(ride.end_time, steps - 1)].add(ride)
 
     def smart_ride_candidates(self, car: Car, max_length):
         min_row = max(car.location.row - max_length, 0)

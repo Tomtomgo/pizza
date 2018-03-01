@@ -57,7 +57,7 @@ def run(input_file):
             points += car.points
             f.write(' '.join([str(len(car.completed_rides))] + [str(ride.i) for ride in car.completed_rides]) + '\n')
 
-level = 'b'
+level = 'c'
 for input_file in ('a_example.in', 'b_should_be_easy.in', 'c_no_hurry.in', 'd_metropolis.in', 'e_high_bonus.in'):
     if input_file[0] > level:
         continue
