@@ -12,6 +12,7 @@ def run(input_file):
 
     with open(input_file, 'r') as f:
         (rows, columns, num_vehicles, num_rides, bonus, steps,) = split_as_int(f.readline())
+        ride_bonus = bonus * 10 if input_file[0] == 'e' else bonus
         rides = [None] * num_rides
         max_length = float('-inf')
         for i, line in enumerate(f):
@@ -27,7 +28,7 @@ def run(input_file):
     for car in cars:
         while car.time < steps:
             smart_rides = rides_index.smart_ride_candidates(car, max_length)
-            ride, points = car.choose_next_ride(smart_rides, bonus, max_length)
+            ride, points = car.choose_next_ride(smart_rides, ride_bonus, max_length)
             # fallback? ride, points = car.choose_next_ride(rides, bonus, max_length, rides)
             if ride is None:
                 break
