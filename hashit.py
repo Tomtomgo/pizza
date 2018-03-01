@@ -38,6 +38,8 @@ def run(input_file):
             vehicle_assigned_to_ride[ride.i] = car.i
 
             time += location.distance_to(ride.start_location)
+            if ride.start_time > time:
+                time += ride.start_time - time
             points += ride.score_points(time, bonus)
             time += ride.length()
             location = ride.stop_location

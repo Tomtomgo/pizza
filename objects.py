@@ -69,10 +69,10 @@ class Car:
             return NO_RIDE
 
         pickup_duration = self.location.distance_to(ride.start_location)
-        pickup_time = self.time + pickup_duration
-        wait = max(ride.start_time - pickup_time, 0)
+        arrival_time = self.time + pickup_duration
+        wait = max(ride.start_time - arrival_time, 0)
 
-        points = ride.score_points(pickup_time, bonus)
+        points = ride.score_points(arrival_time + wait, bonus)
         score = points - wait
 
         return score, points
