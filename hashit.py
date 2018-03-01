@@ -15,22 +15,26 @@ with open(IN, 'r') as f:
     rides = [None] * num_rides
     for i, line in enumerate(f):
         (start_row, start_column, finish_row, finish_column, earliest_start, latest_finish) = split_as_int(line)
-        rides[i] = Ride(Location(start_row, start_column), Location(finish_row, finish_column), earliest_start, latest_finish)
+        rides[i] = Ride(i, Location(start_row, start_column), Location(finish_row, finish_column), earliest_start, latest_finish)
 
 
-vehicle_rides = [list() for i in range(0, num_vehicles)]
-for i, ride in enumerate(rides):
-    pass
+cars = [Car(i) for i in range(0, num_vehicles)]
+for car in cars:
+    while car.time < steps:
+        ride, score = car.choose_next_ride(rides, bonus)
+        if ride is None:
+            break
+        car.complete(ride, score)
 
 
 vehicle_assigned_to_ride = [None] * num_rides
-for vehicle, dispatched in enumerate(vehicle_rides):
-    for ride in dispatched:
-        if vehicle_assigned_to_ride[ride] is not None:
-            raise Exception('Ride {} is assigned to both vehicle {} and {}'.format(ride, vehicle_assigned_to_ride[ride], vehicle))
-        vehicle_assigned_to_ride[ride] = vehicle
+for car in cars:
+    for ride in car.completed_rides:
+        if vehicle_assigned_to_ride[ride.i] is not None:
+            raise Exception('Ride {} is assigned to both vehicle {} and {}'.format(ride.i, vehicle_assigned_to_ride[ride.i], car.i))
+        vehicle_assigned_to_ride[ride.i] = car.i
 
 
 with open(OUT, 'w') as f:
-    for dispatched in vehicle_rides:
-        f.write(' '.join([str(len(dispatched))] + [str(x) for x in dispatched]) + '\n')
+    for car in cars:
+        f.write(' '.join([str(len(car.completed_rides))] + [str(ride.i) for ride in car.completed_rides]) + '\n')
