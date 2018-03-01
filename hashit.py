@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 
-IN = 'example.in'
-OUT = 'example.out'
+IN = 'b_should_be_easy.in'
+OUT = IN.replace('.in', '.out')
 
 
 def split_as_int(line):
