@@ -42,7 +42,7 @@ class Car:
         best_score = 0
         for ride in rides:
             score = self.score_ride(ride, bonus)
-            if score > 0:
+            if score > best_score:
                 best = ride
                 best_score = score
         if best is not None:
