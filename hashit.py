@@ -13,13 +13,14 @@ def run(input_file):
     with open(input_file, 'r') as f:
         (rows, columns, num_vehicles, num_rides, bonus, steps,) = split_as_int(f.readline())
         rides = [None] * num_rides
-        lengths = [0] * num_rides
+        max_length = float('-inf')
         for i, line in enumerate(f):
             (start_row, start_column, finish_row, finish_column, earliest_start, latest_finish) = split_as_int(line)
             rides[i] = Ride(i, Location(start_row, start_column), Location(finish_row, finish_column), earliest_start, latest_finish)
-            lengths[i] = rides[i].length()
-        max_length = max(lengths)
-        print('Max ride-length: {}'.format(max_length))
+            l = rides[i].length()
+            if (l > max_length):
+                max_length = l
+        print('Max ride-length for {}: {}'.format(input_file, max_length))
         rides_index = RidesIndex(rides, rows, columns, steps)
 
     cars = [Car(i) for i in range(0, num_vehicles)]
