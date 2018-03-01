@@ -49,36 +49,35 @@ class Car:
     def choose_next_ride(self, rides, bonus, max_length):
         best = None
         best_score = NEGATIVE_INFINITY
-        best_points = 0
+        best_pickup_duration = 0
         for ride in rides:
-            score, points = self.score_ride(ride, bonus, max_length)
+            score, pickup_duration = self.score_ride(ride, bonus, max_length)
             if score > best_score:
                 best = ride
                 best_score = score
-                best_points = points
-        return best, best_points
+                best_pickup_duration = max(best_pickup_duration, pickup_duration)
+        return best, best_pickup_duration
 
-    def duration(self, ride: Ride):
-        time_until_start = max(self.location.distance_to(ride.start_location), ride.start_time)
+    def duration(self, distance_to_start, ride: Ride):
+        time_until_start = max(distance_to_start, ride.start_time)
         return time_until_start + ride.length()
 
     def score_ride(self, ride: Ride, bonus, max_length):
-        if self.time + self.duration(ride) >= ride.end_time:
+        pickup_duration = self.location.distance_to(ride.start_location)
+        if self.time + self.duration(pickup_duration, ride) >= ride.end_time:
             return NO_RIDE
 
-        pickup_duration = self.location.distance_to(ride.start_location)
         arrival_time = self.time + pickup_duration
         wait = max(ride.start_time - arrival_time, 0)
 
         points = ride.score_points(arrival_time + wait, bonus)
         score = points - wait
 
-        return score, points
+        return score, pickup_duration
 
-    def complete(self, ride: Ride, points):
+    def complete(self, ride: Ride, pickup_duration):
         self.location = ride.stop_location
-        self.time += self.duration(ride)
-        self.points += points
+        self.time += self.duration(pickup_duration, ride)
         self.completed_rides.append(ride)
 
     def __str__(self):

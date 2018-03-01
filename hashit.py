@@ -3,6 +3,7 @@
 from objects import *
 from rides_index import RidesIndex
 import time
+from multiprocessing import Pool
 
 
 def run(input_file):
@@ -57,12 +58,24 @@ def run(input_file):
             points += car.points
             f.write(' '.join([str(len(car.completed_rides))] + [str(ride.i) for ride in car.completed_rides]) + '\n')
 
-level = 'c'
-for input_file in ('a_example.in', 'b_should_be_easy.in', 'c_no_hurry.in', 'd_metropolis.in', 'e_high_bonus.in'):
-    if input_file[0] > level:
-        continue
 
-    print('Running ' + input_file)
+def single_run(input_file):
+    print(input_file + ' Running ' + input_file)
     start = time.time()
     run(input_file)
-    print('Finished in {} seconds'.format(time.time() - start))
+    print(input_file + ' Finished in {} seconds'.format(time.time() - start))
+
+
+def main():
+    level = 'c'
+    levels = [x for x in ('a_example.in', 'b_should_be_easy.in', 'c_no_hurry.in', 'd_metropolis.in', 'e_high_bonus.in') if x[0] <= level]
+
+    pool = Pool(len(levels))
+    pool.map(single_run, levels)
+
+    pool.close()
+    pool.join()
+
+
+if __name__ == '__main__':
+    main()
