@@ -56,8 +56,6 @@ class Car:
                 best = ride
                 best_score = score
                 best_points = points
-        if best is not None:
-            rides.remove(best)
         return best, best_points
 
     def duration(self, ride: Ride):

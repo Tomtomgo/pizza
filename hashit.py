@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from objects import *
+from rides_index import RidesIndex
 import time
 
 
@@ -18,13 +19,18 @@ def run(input_file):
             lengths[i] = rides[i].length()
         max_length = max(lengths)
         print('Max ride-length: {}'.format(max_length))
+        rides_index = RidesIndex(rides, rows, columns, steps)
 
     cars = [Car(i) for i in range(0, num_vehicles)]
     for car in cars:
         while car.time < steps:
-            ride, points = car.choose_next_ride(rides, bonus, max_length)
+            smart_rides = rides_index.smart_ride_candidates(car, max_length)
+            ride, points = car.choose_next_ride(smart_rides, bonus, max_length)
+            # fallback? ride, points = car.choose_next_ride(rides, bonus, max_length, rides)
             if ride is None:
                 break
+            rides_index.mark_as_complete(ride)
+            # fallback? rides.remove(ride)
             car.complete(ride, points)
 
     points = 0
