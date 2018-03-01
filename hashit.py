@@ -30,12 +30,17 @@ def run(input_file):
     points = 0
     vehicle_assigned_to_ride = [None] * num_rides
     for car in cars:
+        time = 0
+        location = Location()
         for ride in car.completed_rides:
             if vehicle_assigned_to_ride[ride.i] is not None:
                 raise Exception('Ride {} is assigned to both vehicle {} and {}'.format(ride.i, vehicle_assigned_to_ride[ride.i], car.i))
             vehicle_assigned_to_ride[ride.i] = car.i
 
-            points += ride.score_points(bonus)
+            time += location.distance_to(ride.start_location)
+            points += ride.score_points(time, bonus)
+            time += ride.length()
+            location = ride.stop_location
 
     print('Scored {}'.format(points))
 
