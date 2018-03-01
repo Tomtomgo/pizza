@@ -18,10 +18,10 @@ def run(input_file):
     cars = [Car(i) for i in range(0, num_vehicles)]
     for car in cars:
         while car.time < steps:
-            ride, score = car.choose_next_ride(rides, bonus)
+            ride, points = car.choose_next_ride(rides, bonus)
             if ride is None:
                 break
-            car.complete(ride, score)
+            car.complete(ride, points)
 
     vehicle_assigned_to_ride = [None] * num_rides
     for car in cars:
