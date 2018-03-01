@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from objects import *
 
 IN = 'b_should_be_easy.in'
 OUT = IN.replace('.in', '.out')
@@ -13,12 +14,12 @@ with open(IN, 'r') as f:
     (rows, columns, num_vehicles, num_rides, bonus, steps,) = split_as_int(f.readline())
     rides = [None] * num_rides
     for i, line in enumerate(f):
-        rides[i] = split_as_int(line)
+        (start_row, start_column, finish_row, finish_column, earliest_start, latest_finish) = split_as_int(line)
+        rides[i] = Ride(Location(start_row, start_column), Location(finish_row, finish_column), earliest_start, latest_finish)
 
 
 vehicle_rides = [list() for i in range(0, num_vehicles)]
-
-for ride, (startRow, startColumn, finishRow, finishColumn, earliestStart, latestFinish) in enumerate(rides):
+for i, ride in enumerate(rides):
     pass
 
 
@@ -33,6 +34,3 @@ for vehicle, dispatched in enumerate(vehicle_rides):
 with open(OUT, 'w') as f:
     for dispatched in vehicle_rides:
         f.write(' '.join([str(len(dispatched))] + [str(x) for x in dispatched]) + '\n')
-
-
-
